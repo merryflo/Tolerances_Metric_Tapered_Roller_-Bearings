@@ -1,0 +1,12 @@
+pandas
+openpyxl
+PyQt5
+pylatex
+matplotlib
+
+
+# run the packaged program (.exe file) without installing a Python interpreter
+pyinstaller
+
+# development tools
+python-dotenv

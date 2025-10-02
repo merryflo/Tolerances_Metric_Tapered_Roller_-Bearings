@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'Tolerances_Metric_Radial_Tapered_Roller_Bearings_3tabs.ui'
+import os
+# Form implementation generated from reading ui file 'FitsRadialInternalClearance.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.11
 #
@@ -9,218 +9,291 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QGuiApplication
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QScrollArea
 
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(808, 914)
+        MainWindow.resize(810, 934)
+        # Store MainWindow reference for resizing
+        self.MainWindow = MainWindow
+
+        # Get the available screen size dynamically
+        screen = QGuiApplication.screenAt(self.MainWindow.frameGeometry().center())
+        # screen_rect = QGuiApplication.screen().availableGeometry()
+        screen_rect = screen.availableGeometry()
+        available_height = screen_rect.height() * 0.90  # 90% of available screen height
+        MainWindow.w = 810
+        MainWindow.h = 934
+        # MainWindow.resize(MainWindow.w, MainWindow.h)
+        MainWindow.setFixedSize(MainWindow.w, MainWindow.h)
+
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+        MainWindow.setCentralWidget(self.centralwidget)
+
+        # Create main layout
+        main_layout = QVBoxLayout(self.centralwidget)
+
+        # Scroll Area
+        scroll_area = QScrollArea()
+        scroll_area.setWidgetResizable(True)
+
+        # Central widget for scroll area
+        scroll_widget = QWidget()
+        scroll_layout = QVBoxLayout(scroll_widget)
+
+        # Set a minimum size to ensure scrolling works when needed
+        scroll_widget.setMinimumSize(MainWindow.w - 50,
+                                     int(MainWindow.h * 1.50))  # Ensures scroll appears when necessary
+
+        # Main Tab Widget
         self.tabWidget = QtWidgets.QTabWidget(self.centralwidget)
-        self.tabWidget.setGeometry(QtCore.QRect(10, 10, 781, 871))
+        self.tabWidget.x = 10
+        self.tabWidget.y = 10
+        self.tabWidget.w = 781
+        self.tabWidget.h = 871
+        self.tabWidget.setGeometry(QtCore.QRect(self.tabWidget.x, self.tabWidget.y, self.tabWidget.w, self.tabWidget.h))
         self.tabWidget.setObjectName("tabWidget")
+        self.tabWidget.setStyleSheet("""
+                            QTabWidget::pane { /* The pane containing the tab widget */
+                                border: 1px solid lightgray;
+                            }
+                            QTabBar::tab { /* Unselected tabs */
+                                background: white;
+                                border: 1px solid lightgray;
+                                padding: 5px;
+                                margin-right: 1px;
+                            }
+                            QTabBar::tab:selected { /* Selected tab */
+                                background: lightgray;
+                                border: 0px solid gray;
+                                padding: 5px;
+                                margin-right: 1px;
+                            }
+                        """)
+
+        # input Tab
         self.inputTab = QtWidgets.QWidget()
         self.inputTab.setObjectName("inputTab")
-        self.bearingTypeLabel = QtWidgets.QLabel(self.inputTab)
-        self.bearingTypeLabel.setGeometry(QtCore.QRect(50, 310, 91, 20))
+
+        # Title Label
+        self.titleLabel = QtWidgets.QLabel(self.inputTab)
         font = QtGui.QFont()
-        font.setFamily("MS Shell Dlg 2")
-        font.setPointSize(11)
-        self.bearingTypeLabel.setFont(font)
-        self.bearingTypeLabel.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.bearingTypeLabel.setObjectName("bearingTypeLabel")
-        self.outerDiameterLabel = QtWidgets.QLabel(self.inputTab)
-        self.outerDiameterLabel.setGeometry(QtCore.QRect(180, 480, 171, 20))
-        font = QtGui.QFont()
-        font.setFamily("MS Shell Dlg 2")
-        font.setPointSize(11)
-        self.outerDiameterLabel.setFont(font)
-        self.outerDiameterLabel.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.outerDiameterLabel.setObjectName("outerDiameterLabel")
-        self.precisionListWidget = QtWidgets.QListWidget(self.inputTab)
-        self.precisionListWidget.setGeometry(QtCore.QRect(530, 460, 171, 111))
-        font = QtGui.QFont()
-        font.setFamily("MS Shell Dlg 2")
-        font.setPointSize(11)
-        self.precisionListWidget.setFont(font)
-        self.precisionListWidget.setObjectName("precisionListWidget")
-        item = QtWidgets.QListWidgetItem()
-        self.precisionListWidget.addItem(item)
-        item = QtWidgets.QListWidgetItem()
-        self.precisionListWidget.addItem(item)
-        item = QtWidgets.QListWidgetItem()
-        self.precisionListWidget.addItem(item)
-        item = QtWidgets.QListWidgetItem()
-        self.precisionListWidget.addItem(item)
-        item = QtWidgets.QListWidgetItem()
-        self.precisionListWidget.addItem(item)
-        self.errorLabel = QtWidgets.QLabel(self.inputTab)
-        self.errorLabel.setGeometry(QtCore.QRect(60, 600, 641, 61))
-        font = QtGui.QFont()
-        font.setPointSize(10)
+        font.setPointSize(14)
         font.setBold(True)
         font.setWeight(75)
-        self.errorLabel.setFont(font)
-        self.errorLabel.setAutoFillBackground(True)
-        self.errorLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.errorLabel.setWordWrap(True)
-        self.errorLabel.setObjectName("errorLabel")
+        self.titleLabel.setFont(font)
+        self.titleLabel.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.titleLabel.setAlignment(QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+        self.titleLabel.x = 50
+        self.titleLabel.y = 20
+        self.titleLabel.w = 421
+        self.titleLabel.h = 101
+        self.titleLabel.move(self.titleLabel.x, self.titleLabel.y)
+        self.titleLabel.setFixedSize(self.titleLabel.w, self.titleLabel.h)
+        self.titleLabel.setObjectName("titleLabel")
+
+        # QLabel for logo
         self.RKBLogo = QtWidgets.QLabel(self.inputTab)
-        self.RKBLogo.setGeometry(QtCore.QRect(550, 10, 201, 121))
+        self.RKBLogo.x = 550
+        self.RKBLogo.y = 10
+        self.RKBLogo.w = 201
+        self.RKBLogo.h = 121
+        self.RKBLogo.setGeometry(QtCore.QRect(self.RKBLogo.x, self.RKBLogo.y, self.RKBLogo.w, self.RKBLogo.h))
         self.RKBLogo.setText("")
         self.RKBLogo.setPixmap(QtGui.QPixmap("../testGitHub/docs/RKBlogo2.png"))
         self.RKBLogo.setScaledContents(True)
         self.RKBLogo.setObjectName("RKBLogo")
+
+        # Part Number Label
+        self.partNoLabel = QtWidgets.QLabel(self.inputTab)
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setWeight(75)
+        self.partNoLabel.setFont(font)
+        self.partNoLabel.x = 30
+        self.partNoLabel.y = 170
+        self.partNoLabel.w = 121
+        self.partNoLabel.h = 21
+        self.partNoLabel.move(self.partNoLabel.x, self.partNoLabel.y)
+        self.partNoLabel.setFixedSize(self.partNoLabel.w, self.partNoLabel.h)
+        self.partNoLabel.setObjectName("partNoLabel")
+
+        # Part Number Text Edit
+        self.partNoTextEdit = QtWidgets.QLineEdit(self.inputTab)
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.partNoTextEdit.setFont(font)
+        self.partNoTextEdit.x = 150
+        self.partNoTextEdit.y = 160
+        self.partNoTextEdit.w = 581
+        self.partNoTextEdit.h = 41
+        self.partNoTextEdit.move(self.partNoTextEdit.x, self.partNoTextEdit.y)
+        self.partNoTextEdit.setFixedSize(self.partNoTextEdit.w, self.partNoTextEdit.h)
+        self.partNoTextEdit.setObjectName("partNoTextEdit")
+
+        # Input Data Label
+        self.inputDataLabel = QtWidgets.QLabel(self.inputTab)
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setWeight(75)
+        self.inputDataLabel.setFont(font)
+        self.inputDataLabel.x = 30
+        self.inputDataLabel.y = 220
+        self.inputDataLabel.w = 131
+        self.inputDataLabel.h = 31
+        self.inputDataLabel.move(self.inputDataLabel.x, self.inputDataLabel.y)
+        self.inputDataLabel.setFixedSize(self.inputDataLabel.w, self.inputDataLabel.h)
+        self.inputDataLabel.setObjectName("inputDataLabel")
+
+        # Input Line
         self.inputLine = QtWidgets.QFrame(self.inputTab)
-        self.inputLine.setGeometry(QtCore.QRect(30, 260, 701, 21))
-        palette = QtGui.QPalette()
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Light, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Midlight, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Dark, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Mid, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.BrightText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Shadow, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 63))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.AlternateBase, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 220))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ToolTipBase, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ToolTipText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Light, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Midlight, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Dark, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Mid, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.BrightText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Shadow, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 63))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.AlternateBase, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 220))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ToolTipBase, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ToolTipText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Light, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Midlight, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Dark, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Mid, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.BrightText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Shadow, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.AlternateBase, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 220))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ToolTipBase, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ToolTipText, brush)
-        self.inputLine.setPalette(palette)
-        self.inputLine.setAutoFillBackground(True)
+        self.inputLine.x = 30
+        self.inputLine.y = 260
+        self.inputLine.w = 701
+        self.inputLine.h = 21
+        self.inputLine.setGeometry(QtCore.QRect(self.inputLine.x, self.inputLine.y, self.inputLine.w, self.inputLine.h))
+        self.inputLine.setStyleSheet("background-color: rgb(0, 0, 127);")
         self.inputLine.setFrameShape(QtWidgets.QFrame.HLine)
         self.inputLine.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.inputLine.setObjectName("inputLine")
+
+        # Inner Ring Symmetry Label
+        self.innerRingSymmetryLabel = QtWidgets.QLabel(self.inputTab)
+        font = QtGui.QFont()
+        font.setFamily("MS Shell Dlg 2")
+        font.setPointSize(11)
+        self.innerRingSymmetryLabel.setFont(font)
+        self.innerRingSymmetryLabel.x = 60
+        self.innerRingSymmetryLabel.y = 290
+        self.innerRingSymmetryLabel.w = 81
+        self.innerRingSymmetryLabel.h = 20
+        self.innerRingSymmetryLabel.move(self.innerRingSymmetryLabel.x, self.innerRingSymmetryLabel.y)
+        self.innerRingSymmetryLabel.setFixedSize(self.innerRingSymmetryLabel.w, self.innerRingSymmetryLabel.h)
+        self.innerRingSymmetryLabel.setAlignment(
+            QtCore.Qt.AlignLeft |  QtCore.Qt.AlignVCenter)
+        self.innerRingSymmetryLabel.setObjectName("innerRingSymmetryLabel")
+
+        # Inner Ring Symmetry List Widget
+        self.innerRingSymmetryListWidget = QtWidgets.QListWidget(self.inputTab)
+        font = QtGui.QFont()
+        font.setFamily("MS Shell Dlg 2")
+        font.setPointSize(11)
+        self.innerRingSymmetryListWidget.setFont(font)
+        self.innerRingSymmetryListWidget.x = 60
+        self.innerRingSymmetryListWidget.y = 320
+        self.innerRingSymmetryListWidget.w = 131
+        self.innerRingSymmetryListWidget.h = 51
+        self.innerRingSymmetryListWidget.move(self.innerRingSymmetryListWidget.x, self.innerRingSymmetryListWidget.y)
+        self.innerRingSymmetryListWidget.setFixedSize(self.innerRingSymmetryListWidget.w,
+                                                      self.innerRingSymmetryListWidget.h)
+        self.innerRingSymmetryListWidget.setObjectName("innerRingSymmetryListWidget")
+        item = QtWidgets.QListWidgetItem()
+        self.innerRingSymmetryListWidget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.innerRingSymmetryListWidget.addItem(item)
+
+        # Outer Ring Symmetry Label
+        self.outerRingSymmetryLabel = QtWidgets.QLabel(self.inputTab)
+        font = QtGui.QFont()
+        font.setFamily("MS Shell Dlg 2")
+        font.setPointSize(11)
+        self.outerRingSymmetryLabel.setFont(font)
+        self.outerRingSymmetryLabel.x = 310
+        self.outerRingSymmetryLabel.y = 290
+        self.outerRingSymmetryLabel.w = 71
+        self.outerRingSymmetryLabel.h = 20
+        self.outerRingSymmetryLabel.move(self.outerRingSymmetryLabel.x, self.outerRingSymmetryLabel.y)
+        self.outerRingSymmetryLabel.setFixedSize(self.outerRingSymmetryLabel.w, self.outerRingSymmetryLabel.h)
+        self.outerRingSymmetryLabel.setAlignment(
+            QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter
+        )
+        self.outerRingSymmetryLabel.setObjectName("outerRingSymmetryLabel")
+
+        # Outer Ring Symmetry List Widget
+        self.outerRingSymmetryListWidget = QtWidgets.QListWidget(self.inputTab)
+        font = QtGui.QFont()
+        font.setFamily("MS Shell Dlg 2")
+        font.setPointSize(11)
+        self.outerRingSymmetryListWidget.setFont(font)
+        self.outerRingSymmetryListWidget.x = 310
+        self.outerRingSymmetryListWidget.y = 320
+        self.outerRingSymmetryListWidget.w = 131
+        self.outerRingSymmetryListWidget.h = 51
+        self.outerRingSymmetryListWidget.move(self.outerRingSymmetryListWidget.x, self.outerRingSymmetryListWidget.y)
+        self.outerRingSymmetryListWidget.setFixedSize(
+            self.outerRingSymmetryListWidget.w, self.outerRingSymmetryListWidget.h
+        )
+        self.outerRingSymmetryListWidget.setObjectName("outerRingSymmetryListWidget")
+        item = QtWidgets.QListWidgetItem()
+        self.outerRingSymmetryListWidget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.outerRingSymmetryListWidget.addItem(item)
+
+        # Stiffness Label
+        self.stiffnessLabel = QtWidgets.QLabel(self.inputTab)
+        font = QtGui.QFont()
+        font.setFamily("MS Shell Dlg 2")
+        font.setPointSize(11)
+        self.stiffnessLabel.setFont(font)
+        self.stiffnessLabel.x = 560
+        self.stiffnessLabel.y = 290
+        self.stiffnessLabel.w = 81
+        self.stiffnessLabel.h = 20
+        self.stiffnessLabel.move(self.stiffnessLabel.x, self.stiffnessLabel.y)
+        self.stiffnessLabel.setFixedSize(self.stiffnessLabel.w, self.stiffnessLabel.h)
+        self.stiffnessLabel.setAlignment(
+            QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter
+        )
+        self.stiffnessLabel.setObjectName("stiffnessLabel")
+
+        # stiffnessLineEdit
+        self.stiffnessLineEdit = QtWidgets.QLineEdit(self.inputTab)
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        self.stiffnessLineEdit.setFont(font)
+        self.stiffnessLineEdit.x = 560
+        self.stiffnessLineEdit.y = 320
+        self.stiffnessLineEdit.w = 81
+        self.stiffnessLineEdit.h = 22
+        self.stiffnessLineEdit.move(self.stiffnessLineEdit.x, self.stiffnessLineEdit.y)
+        self.stiffnessLineEdit.setFixedSize(self.stiffnessLineEdit.w, self.stiffnessLineEdit.h)
+        self.stiffnessLineEdit.setReadOnly(True)
+        self.stiffnessLineEdit.setObjectName("stiffnessLineEdit")
+
+        # Bearing Type Label
+        self.bearingTypeLabel = QtWidgets.QLabel(self.inputTab)
+        font = QtGui.QFont()
+        font.setFamily("MS Shell Dlg 2")
+        font.setPointSize(11)
+        self.bearingTypeLabel.setFont(font)
+        self.bearingTypeLabel.x = 60
+        self.bearingTypeLabel.y = 390
+        self.bearingTypeLabel.w = 91
+        self.bearingTypeLabel.h = 20
+        self.bearingTypeLabel.move(self.bearingTypeLabel.x, self.bearingTypeLabel.y)
+        self.bearingTypeLabel.setFixedSize(self.bearingTypeLabel.w, self.bearingTypeLabel.h)
+        self.bearingTypeLabel.setAlignment(QtCore.Qt.AlignLeft |  QtCore.Qt.AlignVCenter)
+        self.bearingTypeLabel.setObjectName("bearingTypeLabel")
+
+        # Bearing Type List Widget
         self.bearingTypeListWidget = QtWidgets.QListWidget(self.inputTab)
-        self.bearingTypeListWidget.setGeometry(QtCore.QRect(60, 340, 131, 111))
         font = QtGui.QFont()
         font.setFamily("MS Shell Dlg 2")
         font.setPointSize(11)
         self.bearingTypeListWidget.setFont(font)
+        self.bearingTypeListWidget.x = 60
+        self.bearingTypeListWidget.y = 420
+        self.bearingTypeListWidget.w = 131
+        self.bearingTypeListWidget.h = 111
+        self.bearingTypeListWidget.move(self.bearingTypeListWidget.x, self.bearingTypeListWidget.y)
+        self.bearingTypeListWidget.setFixedSize(self.bearingTypeListWidget.w, self.bearingTypeListWidget.h)
         self.bearingTypeListWidget.setObjectName("bearingTypeListWidget")
         item = QtWidgets.QListWidgetItem()
         self.bearingTypeListWidget.addItem(item)
@@ -232,583 +305,690 @@ class Ui_MainWindow(object):
         self.bearingTypeListWidget.addItem(item)
         item = QtWidgets.QListWidgetItem()
         self.bearingTypeListWidget.addItem(item)
-        self.precisionLabel = QtWidgets.QLabel(self.inputTab)
-        self.precisionLabel.setGeometry(QtCore.QRect(530, 430, 71, 20))
+
+        # flangePresenceListWidget
+        self.flangePresenceListWidget = QtWidgets.QListWidget(self.inputTab)
         font = QtGui.QFont()
         font.setFamily("MS Shell Dlg 2")
         font.setPointSize(11)
-        self.precisionLabel.setFont(font)
-        self.precisionLabel.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
-        self.precisionLabel.setObjectName("precisionLabel")
-        self.printButton = QtWidgets.QPushButton(self.inputTab)
-        self.printButton.setGeometry(QtCore.QRect(460, 690, 111, 51))
+        self.flangePresenceListWidget.setFont(font)
+        self.flangePresenceListWidget.x = 310
+        self.flangePresenceListWidget.y = 420
+        self.flangePresenceListWidget.w = 131
+        self.flangePresenceListWidget.h = 51
+        self.flangePresenceListWidget.move(self.flangePresenceListWidget.x,
+                                                  self.flangePresenceListWidget.y)
+        self.flangePresenceListWidget.setFixedSize(self.flangePresenceListWidget.w,
+                                                          self.flangePresenceListWidget.h)
+        self.flangePresenceListWidget.setObjectName("flangePresenceListWidget")
+        item = QtWidgets.QListWidgetItem()
+        item.setFont(font)
+        self.flangePresenceListWidget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        item.setFont(font)
+        self.flangePresenceListWidget.addItem(item)
+
+        # flangeTypeListWidget
+        self.flangeTypeListWidget = QtWidgets.QListWidget(self.inputTab)
         font = QtGui.QFont()
-        font.setPointSize(10)
-        font.setBold(True)
-        font.setWeight(75)
-        self.printButton.setFont(font)
-        self.printButton.setObjectName("printButton")
-        self.titleLabel = QtWidgets.QLabel(self.inputTab)
-        self.titleLabel.setGeometry(QtCore.QRect(50, 20, 421, 101))
-        font = QtGui.QFont()
-        font.setPointSize(16)
-        font.setBold(True)
-        font.setWeight(75)
-        self.titleLabel.setFont(font)
-        self.titleLabel.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.titleLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.titleLabel.setObjectName("titleLabel")
-        self.partNoLabel = QtWidgets.QLabel(self.inputTab)
-        self.partNoLabel.setGeometry(QtCore.QRect(30, 170, 121, 21))
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        font.setBold(True)
-        font.setWeight(75)
-        self.partNoLabel.setFont(font)
-        self.partNoLabel.setObjectName("partNoLabel")
-        self.inputDataLabel = QtWidgets.QLabel(self.inputTab)
-        self.inputDataLabel.setGeometry(QtCore.QRect(30, 220, 131, 31))
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        font.setBold(True)
-        font.setWeight(75)
-        self.inputDataLabel.setFont(font)
-        self.inputDataLabel.setObjectName("inputDataLabel")
-        self.calculateButton = QtWidgets.QPushButton(self.inputTab)
-        self.calculateButton.setGeometry(QtCore.QRect(160, 690, 111, 51))
-        palette = QtGui.QPalette()
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Dark, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Mid, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Dark, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Mid, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Dark, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Mid, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
-        self.calculateButton.setPalette(palette)
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        font.setBold(True)
-        font.setWeight(75)
-        self.calculateButton.setFont(font)
-        self.calculateButton.setAutoFillBackground(False)
-        self.calculateButton.setObjectName("calculateButton")
+        font.setFamily("MS Shell Dlg 2")
+        font.setPointSize(11)
+        self.flangeTypeListWidget.setFont(font)
+        self.flangeTypeListWidget.x = 560
+        self.flangeTypeListWidget.y = 420
+        self.flangeTypeListWidget.w = 141
+        self.flangeTypeListWidget.h = 51
+        self.flangeTypeListWidget.move(self.flangeTypeListWidget.x,
+                                           self.flangeTypeListWidget.y)
+        self.flangeTypeListWidget.setFixedSize(self.flangeTypeListWidget.w,
+                                                   self.flangeTypeListWidget.h)
+        self.flangeTypeListWidget.setObjectName("flangeTypeListWidget")
+
+        # boreDiameterLabel
         self.boreDiameterLabel = QtWidgets.QLabel(self.inputTab)
-        self.boreDiameterLabel.setGeometry(QtCore.QRect(200, 430, 151, 20))
         font = QtGui.QFont()
         font.setFamily("MS Shell Dlg 2")
         font.setPointSize(11)
         self.boreDiameterLabel.setFont(font)
-        self.boreDiameterLabel.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.boreDiameterLabel.x = 220
+        self.boreDiameterLabel.y = 510
+        self.boreDiameterLabel.w = 151
+        self.boreDiameterLabel.h = 20
+        self.boreDiameterLabel.move(self.boreDiameterLabel.x,
+                                                  self.boreDiameterLabel.y)
+        self.boreDiameterLabel.setFixedSize(self.boreDiameterLabel.w,
+                                                          self.boreDiameterLabel.h)
+        self.boreDiameterLabel.setAlignment(
+            QtCore.Qt.AlignLeading | QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
         self.boreDiameterLabel.setObjectName("boreDiameterLabel")
-        self.partNoTextEdit = QtWidgets.QTextEdit(self.inputTab)
-        self.partNoTextEdit.setGeometry(QtCore.QRect(150, 160, 581, 41))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.partNoTextEdit.setFont(font)
-        self.partNoTextEdit.setObjectName("partNoTextEdit")
-        self.resetButton = QtWidgets.QPushButton(self.inputTab)
-        self.resetButton.setGeometry(QtCore.QRect(310, 690, 111, 51))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        font.setBold(True)
-        font.setWeight(75)
-        self.resetButton.setFont(font)
-        self.resetButton.setObjectName("resetButton")
+
+        # boreDiameterLineEdit
         self.boreDiameterLineEdit = QtWidgets.QLineEdit(self.inputTab)
-        self.boreDiameterLineEdit.setGeometry(QtCore.QRect(370, 430, 81, 22))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.boreDiameterLineEdit.setFont(font)
+        self.boreDiameterLineEdit.x = 390
+        self.boreDiameterLineEdit.y = 510
+        self.boreDiameterLineEdit.w = 81
+        self.boreDiameterLineEdit.h = 22
+        self.boreDiameterLineEdit.move(self.boreDiameterLineEdit.x,
+                                                     self.boreDiameterLineEdit.y)
+        self.boreDiameterLineEdit.setFixedSize(self.boreDiameterLineEdit.w,
+                                                             self.boreDiameterLineEdit.h)
         self.boreDiameterLineEdit.setObjectName("boreDiameterLineEdit")
+
+        # outerDiameterLabel
+        self.outerDiameterLabel = QtWidgets.QLabel(self.inputTab)
+        font = QtGui.QFont()
+        font.setFamily("MS Shell Dlg 2")
+        font.setPointSize(11)
+        self.outerDiameterLabel.setFont(font)
+        self.outerDiameterLabel.x = 200
+        self.outerDiameterLabel.y = 560
+        self.outerDiameterLabel.w = 171
+        self.outerDiameterLabel.h = 20
+        self.outerDiameterLabel.move(self.outerDiameterLabel.x,
+                                                  self.outerDiameterLabel.y)
+        self.outerDiameterLabel.setFixedSize(self.outerDiameterLabel.w,
+                                                          self.outerDiameterLabel.h)
+        self.outerDiameterLabel.setAlignment(
+            QtCore.Qt.AlignLeading | QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        self.outerDiameterLabel.setObjectName("outerDiameterLabel")
+
+        # outerDiameterLineEdit
         self.outerDiameterLineEdit = QtWidgets.QLineEdit(self.inputTab)
-        self.outerDiameterLineEdit.setGeometry(QtCore.QRect(370, 480, 81, 22))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.outerDiameterLineEdit.setFont(font)
+        self.outerDiameterLineEdit.x = 390
+        self.outerDiameterLineEdit.y = 560
+        self.outerDiameterLineEdit.w = 81
+        self.outerDiameterLineEdit.h = 22
+        self.outerDiameterLineEdit.move(self.outerDiameterLineEdit.x,
+                                                     self.outerDiameterLineEdit.y)
+        self.outerDiameterLineEdit.setFixedSize(self.outerDiameterLineEdit.w,
+                                                             self.outerDiameterLineEdit.h)
         self.outerDiameterLineEdit.setObjectName("outerDiameterLineEdit")
-        self.flangeTypeListWidget = QtWidgets.QListWidget(self.inputTab)
-        self.flangeTypeListWidget.setGeometry(QtCore.QRect(530, 340, 171, 51))
-        font = QtGui.QFont()
-        font.setFamily("MS Shell Dlg 2")
-        self.flangeTypeListWidget.setFont(font)
-        self.flangeTypeListWidget.setObjectName("flangeTypeListWidget")
-        self.flangePresenceListWidget = QtWidgets.QListWidget(self.inputTab)
-        self.flangePresenceListWidget.setGeometry(QtCore.QRect(280, 340, 171, 51))
-        font = QtGui.QFont()
-        font.setFamily("MS Shell Dlg 2")
-        self.flangePresenceListWidget.setFont(font)
-        self.flangePresenceListWidget.setObjectName("flangePresenceListWidget")
-        item = QtWidgets.QListWidgetItem()
-        font = QtGui.QFont()
-        font.setPointSize(11)
-        item.setFont(font)
-        self.flangePresenceListWidget.addItem(item)
-        item = QtWidgets.QListWidgetItem()
-        font = QtGui.QFont()
-        font.setPointSize(11)
-        item.setFont(font)
-        self.flangePresenceListWidget.addItem(item)
+
+        # orFlangeDiameterLabel
         self.orFlangeDiameterLabel = QtWidgets.QLabel(self.inputTab)
-        self.orFlangeDiameterLabel.setGeometry(QtCore.QRect(110, 530, 241, 20))
         font = QtGui.QFont()
         font.setFamily("MS Shell Dlg 2")
         font.setPointSize(11)
         self.orFlangeDiameterLabel.setFont(font)
-        self.orFlangeDiameterLabel.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.orFlangeDiameterLabel.x = 130
+        self.orFlangeDiameterLabel.y = 610
+        self.orFlangeDiameterLabel.w = 241
+        self.orFlangeDiameterLabel.h = 20
+        self.orFlangeDiameterLabel.move(self.orFlangeDiameterLabel.x,
+                                     self.orFlangeDiameterLabel.y)
+        self.orFlangeDiameterLabel.setFixedSize(self.orFlangeDiameterLabel.w,
+                                             self.orFlangeDiameterLabel.h)
+        self.orFlangeDiameterLabel.setAlignment(
+            QtCore.Qt.AlignLeading | QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
         self.orFlangeDiameterLabel.setObjectName("orFlangeDiameterLabel")
+
+        # orFlangeDiameterLineEdit
         self.orFlangeDiameterLineEdit = QtWidgets.QLineEdit(self.inputTab)
-        self.orFlangeDiameterLineEdit.setGeometry(QtCore.QRect(370, 530, 81, 22))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.orFlangeDiameterLineEdit.setFont(font)
+        self.orFlangeDiameterLineEdit.x = 390
+        self.orFlangeDiameterLineEdit.y = 610
+        self.orFlangeDiameterLineEdit.w = 81
+        self.orFlangeDiameterLineEdit.h = 22
+        self.orFlangeDiameterLineEdit.move(self.orFlangeDiameterLineEdit.x,
+                                        self.orFlangeDiameterLineEdit.y)
+        self.orFlangeDiameterLineEdit.setFixedSize(self.orFlangeDiameterLineEdit.w,
+                                                self.orFlangeDiameterLineEdit.h)
         self.orFlangeDiameterLineEdit.setObjectName("orFlangeDiameterLineEdit")
+
+        # Precision Label
+        self.precisionLabel = QtWidgets.QLabel(self.inputTab)
+        font = QtGui.QFont()
+        font.setFamily("MS Shell Dlg 2")
+        font.setPointSize(11)
+        self.precisionLabel.setFont(font)
+        self.precisionLabel.x = 560
+        self.precisionLabel.y = 500
+        self.precisionLabel.w = 71
+        self.precisionLabel.h = 20
+        self.precisionLabel.move(self.precisionLabel.x, self.precisionLabel.y)
+        self.precisionLabel.setFixedSize(self.precisionLabel.w, self.precisionLabel.h)
+        self.precisionLabel.setAlignment(QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+        self.precisionLabel.setObjectName("precisionLabel")
+
+        # Precision List Widget
+        self.precisionListWidget = QtWidgets.QListWidget(self.inputTab)
+        font = QtGui.QFont()
+        font.setFamily("MS Shell Dlg 2")
+        font.setPointSize(11)
+        self.precisionListWidget.setFont(font)
+        self.precisionListWidget.x = 560
+        self.precisionListWidget.y = 530
+        self.precisionListWidget.w = 141
+        self.precisionListWidget.h = 111
+        self.precisionListWidget.move(self.precisionListWidget.x, self.precisionListWidget.y)
+        self.precisionListWidget.setFixedSize(self.precisionListWidget.w, self.precisionListWidget.h)
+        self.precisionListWidget.setObjectName("precisionListWidget")
+        item = QtWidgets.QListWidgetItem()
+        self.precisionListWidget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.precisionListWidget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.precisionListWidget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.precisionListWidget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.precisionListWidget.addItem(item)
+
+        # Error Label
+        self.errorLabel = QtWidgets.QLabel(self.inputTab)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.errorLabel.setFont(font)
+        self.errorLabel.x = 60
+        self.errorLabel.y = 680
+        self.errorLabel.w = 621
+        self.errorLabel.h = 61
+        self.errorLabel.move(self.errorLabel.x, self.errorLabel.y)
+        self.errorLabel.setFixedSize(self.errorLabel.w, self.errorLabel.h)
+        self.errorLabel.setAutoFillBackground(True)
+        self.errorLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.errorLabel.setWordWrap(True)
+        self.errorLabel.setObjectName("errorLabel")
+
+        # QPushButton calculateButton
+        self.calculateButton = QtWidgets.QPushButton(self.inputTab)
+        self.calculateButton.x = 160
+        self.calculateButton.y = 770
+        self.calculateButton.w = 111
+        self.calculateButton.h = 51
+        self.calculateButton.move(self.calculateButton.x, self.calculateButton.y)
+        self.calculateButton.setFixedSize(self.calculateButton.w, self.calculateButton.h)
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        font.setBold(True)
+        font.setWeight(75)
+        self.calculateButton.setFont(font)
+        self.calculateButton.setObjectName("calculateButton")
+
+        # QPushButton resetButton
+        self.resetButton = QtWidgets.QPushButton(self.inputTab)
+        self.resetButton.x = 310
+        self.resetButton.y = 770
+        self.resetButton.w = 111
+        self.resetButton.h = 51
+        self.resetButton.move(self.resetButton.x, self.resetButton.y)
+        self.resetButton.setFixedSize(self.resetButton.w, self.resetButton.h)
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        font.setBold(True)
+        font.setWeight(75)
+        self.resetButton.setFont(font)
+        self.resetButton.setObjectName("resetButton")
+
+        # QPushButton printButton
+        self.printButton = QtWidgets.QPushButton(self.inputTab)
+        self.printButton.x = 460
+        self.printButton.y = 770
+        self.printButton.w = 111
+        self.printButton.h = 51
+        self.printButton.move(self.printButton.x, self.printButton.y)
+        self.printButton.setFixedSize(self.printButton.w, self.printButton.h)
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        font.setBold(True)
+        font.setWeight(75)
+        self.printButton.setFont(font)
+        self.printButton.setObjectName("printButton")
+
+        # Adding Tab to TabWidget
         self.tabWidget.addTab(self.inputTab, "")
+
         self.outputTab = QtWidgets.QWidget()
         self.outputTab.setObjectName("outputTab")
-        self.outputLine = QtWidgets.QFrame(self.outputTab)
-        self.outputLine.setGeometry(QtCore.QRect(30, 60, 791, 21))
-        palette = QtGui.QPalette()
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Light, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Midlight, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Dark, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Mid, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.BrightText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Shadow, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 63))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.AlternateBase, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 220))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ToolTipBase, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ToolTipText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Light, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Midlight, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Dark, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Mid, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.BrightText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Shadow, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 63))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.AlternateBase, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 220))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ToolTipBase, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ToolTipText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Light, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Midlight, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Dark, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Mid, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.BrightText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Shadow, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 127))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.AlternateBase, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 220))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ToolTipBase, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ToolTipText, brush)
-        self.outputLine.setPalette(palette)
-        self.outputLine.setAutoFillBackground(True)
-        self.outputLine.setFrameShape(QtWidgets.QFrame.HLine)
-        self.outputLine.setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.outputLine.setObjectName("outputLine")
-        self.outputLabel = QtWidgets.QLabel(self.outputTab)
-        self.outputLabel.setGeometry(QtCore.QRect(30, 20, 711, 31))
+
+        # Input Data Label
+        self.outputDataLabel = QtWidgets.QLabel(self.outputTab)
         font = QtGui.QFont()
         font.setPointSize(14)
         font.setBold(True)
         font.setWeight(75)
-        self.outputLabel.setFont(font)
-        self.outputLabel.setObjectName("outputLabel")
+        self.outputDataLabel.setFont(font)
+        self.outputDataLabel.x = 30
+        self.outputDataLabel.y = 10
+        self.outputDataLabel.w = 711
+        self.outputDataLabel.h = 31
+        self.outputDataLabel.move(self.outputDataLabel.x, self.outputDataLabel.y)
+        self.outputDataLabel.setFixedSize(self.outputDataLabel.w, self.outputDataLabel.h)
+        self.outputDataLabel.setObjectName("inputDataLabel")
+
+        # output Line
+        self.outputLine = QtWidgets.QFrame(self.outputTab)
+        self.outputLine.x = 30
+        self.outputLine.y = 40
+        self.outputLine.w = 701
+        self.outputLine.h = 21
+        self.outputLine.move(self.outputLine.x, self.outputLine.y)
+        self.outputLine.setFixedSize(self.outputLine.w, self.outputLine.h)
+        self.outputLine.setStyleSheet("background-color: rgb(0, 0, 127);")
+        self.outputLine.setFrameShape(QtWidgets.QFrame.HLine)
+        self.outputLine.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.outputLine.setObjectName("outputLine")
+
+        # innerRingLabel
         self.innerRingLabel = QtWidgets.QLabel(self.outputTab)
-        self.innerRingLabel.setGeometry(QtCore.QRect(40, 210, 91, 20))
         font = QtGui.QFont()
         font.setFamily("MS Shell Dlg 2")
         font.setPointSize(11)
+        font.setBold(True)
         self.innerRingLabel.setFont(font)
-        self.innerRingLabel.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
+        self.innerRingLabel.x = 40
+        self.innerRingLabel.y = 210
+        self.innerRingLabel.w = 91
+        self.innerRingLabel.h = 20
+        self.innerRingLabel.move(self.innerRingLabel.x, self.innerRingLabel.y)
+        self.innerRingLabel.setFixedSize(self.innerRingLabel.w, self.innerRingLabel.h)
+        self.innerRingLabel.setAlignment(QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
         self.innerRingLabel.setObjectName("innerRingLabel")
-        self.outerRingLabel = QtWidgets.QLabel(self.outputTab)
-        self.outerRingLabel.setGeometry(QtCore.QRect(40, 440, 81, 20))
+
+        # QTableWidget innerRingTableWidget1
+        self.innerRingTableWidget1 = QtWidgets.QTableWidget(self.outputTab)
+        self.innerRingTableWidget1.x = 150
+        self.innerRingTableWidget1.y = 80
+        self.innerRingTableWidget1.w = 321
+        self.innerRingTableWidget1.h = 291
+        self.innerRingTableWidget1.move(self.innerRingTableWidget1.x, self.innerRingTableWidget1.y)
+        self.innerRingTableWidget1.setFixedSize(self.innerRingTableWidget1.w,
+                                                self.innerRingTableWidget1.h)
         font = QtGui.QFont()
         font.setFamily("MS Shell Dlg 2")
         font.setPointSize(11)
-        self.outerRingLabel.setFont(font)
-        self.outerRingLabel.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
-        self.outerRingLabel.setObjectName("outerRingLabel")
-        self.innerRingTableWidget2 = QtWidgets.QTableWidget(self.outputTab)
-        self.innerRingTableWidget2.setGeometry(QtCore.QRect(510, 110, 221, 151))
-        self.innerRingTableWidget2.setObjectName("innerRingTableWidget2")
-        self.innerRingTableWidget2.setColumnCount(3)
-        self.innerRingTableWidget2.setRowCount(10)
-        item = QtWidgets.QTableWidgetItem()
-        self.innerRingTableWidget2.setVerticalHeaderItem(0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.innerRingTableWidget2.setVerticalHeaderItem(1, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.innerRingTableWidget2.setVerticalHeaderItem(2, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.innerRingTableWidget2.setVerticalHeaderItem(3, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.innerRingTableWidget2.setVerticalHeaderItem(4, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.innerRingTableWidget2.setVerticalHeaderItem(5, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.innerRingTableWidget2.setVerticalHeaderItem(6, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.innerRingTableWidget2.setVerticalHeaderItem(7, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.innerRingTableWidget2.setVerticalHeaderItem(8, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.innerRingTableWidget2.setVerticalHeaderItem(9, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.innerRingTableWidget2.setHorizontalHeaderItem(0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.innerRingTableWidget2.setHorizontalHeaderItem(1, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.innerRingTableWidget2.setHorizontalHeaderItem(2, item)
-        self.innerRingTableWidget1 = QtWidgets.QTableWidget(self.outputTab)
-        self.innerRingTableWidget1.setGeometry(QtCore.QRect(150, 110, 321, 241))
+        self.innerRingTableWidget1.setFont(font)
+        self.innerRingTableWidget1.setLineWidth(1)
+        self.innerRingTableWidget1.setMidLineWidth(1)
+        self.innerRingTableWidget1.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.innerRingTableWidget1.setWordWrap(True)
         self.innerRingTableWidget1.setObjectName("innerRingTableWidget1")
         self.innerRingTableWidget1.setColumnCount(3)
-        self.innerRingTableWidget1.setRowCount(10)
-        item = QtWidgets.QTableWidgetItem()
-        self.innerRingTableWidget1.setVerticalHeaderItem(0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.innerRingTableWidget1.setVerticalHeaderItem(1, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.innerRingTableWidget1.setVerticalHeaderItem(2, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.innerRingTableWidget1.setVerticalHeaderItem(3, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.innerRingTableWidget1.setVerticalHeaderItem(4, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.innerRingTableWidget1.setVerticalHeaderItem(5, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.innerRingTableWidget1.setVerticalHeaderItem(6, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.innerRingTableWidget1.setVerticalHeaderItem(7, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.innerRingTableWidget1.setVerticalHeaderItem(8, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.innerRingTableWidget1.setVerticalHeaderItem(9, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.innerRingTableWidget1.setHorizontalHeaderItem(0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.innerRingTableWidget1.setHorizontalHeaderItem(1, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.innerRingTableWidget1.setHorizontalHeaderItem(2, item)
+        self.innerRingTableWidget1.setRowCount(12)
+        self.innerRingTableWidget1.setStyleSheet("""
+                    QTableWidget {
+                        gridline-color: black;  /* Set gridline color */
+                    }
+                """)
+        self.adjust_table_widget_no_scale(self.innerRingTableWidget1)
+
+        # QTableWidget innerRingTableWidget2
+        self.innerRingTableWidget2 = QtWidgets.QTableWidget(self.outputTab)
+        self.innerRingTableWidget2.x = 510
+        self.innerRingTableWidget2.y = 80
+        self.innerRingTableWidget2.w = 223
+        self.innerRingTableWidget2.h = 126
+        self.innerRingTableWidget2.move(self.innerRingTableWidget2.x, self.innerRingTableWidget2.y)
+        self.innerRingTableWidget2.setFixedSize(self.innerRingTableWidget2.w,
+                                                self.innerRingTableWidget2.h)
+        font = QtGui.QFont()
+        font.setFamily("MS Shell Dlg 2")
+        font.setPointSize(11)
+        self.innerRingTableWidget2.setFont(font)
+        self.innerRingTableWidget2.setLineWidth(1)
+        self.innerRingTableWidget2.setMidLineWidth(1)
+        self.innerRingTableWidget2.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.innerRingTableWidget2.setWordWrap(True)
+        self.innerRingTableWidget2.setObjectName("innerRingTableWidget2")
+        self.innerRingTableWidget2.setColumnCount(2)
+        self.innerRingTableWidget2.setRowCount(5)
+        self.innerRingTableWidget2.setStyleSheet("""
+                           QTableWidget {
+                               gridline-color: black;  /* Set gridline color */
+                           }
+                       """)
+        self.adjust_table_widget_no_scale(self.innerRingTableWidget2)
+
+        # outerRingLabel
+        self.outerRingLabel = QtWidgets.QLabel(self.outputTab)
+        font = QtGui.QFont()
+        font.setFamily("MS Shell Dlg 2")
+        font.setPointSize(11)
+        font.setBold(True)
+        self.outerRingLabel.setFont(font)
+        self.outerRingLabel.x = 40
+        self.outerRingLabel.y = 460
+        self.outerRingLabel.w = 81
+        self.outerRingLabel.h = 20
+        self.outerRingLabel.move(self.outerRingLabel.x, self.outerRingLabel.y)
+        self.outerRingLabel.setFixedSize(self.outerRingLabel.w, self.outerRingLabel.h)
+        self.outerRingLabel.setAlignment(QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+        self.outerRingLabel.setObjectName("outerRingLabel")
+
+        # QTableWidget outerRingTableWidget1
         self.outerRingTableWidget1 = QtWidgets.QTableWidget(self.outputTab)
-        self.outerRingTableWidget1.setGeometry(QtCore.QRect(150, 380, 321, 211))
+        self.outerRingTableWidget1.x = 150
+        self.outerRingTableWidget1.y = 385
+        self.outerRingTableWidget1.w = 321
+        self.outerRingTableWidget1.h = 235
+        self.outerRingTableWidget1.move(self.outerRingTableWidget1.x, self.outerRingTableWidget1.y)
+        self.outerRingTableWidget1.setFixedSize(self.outerRingTableWidget1.w,
+                                                self.outerRingTableWidget1.h)
+        font = QtGui.QFont()
+        font.setFamily("MS Shell Dlg 2")
+        font.setPointSize(11)
+        self.outerRingTableWidget1.setFont(font)
+        self.outerRingTableWidget1.setLineWidth(1)
+        self.outerRingTableWidget1.setMidLineWidth(1)
+        self.outerRingTableWidget1.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.outerRingTableWidget1.setWordWrap(True)
         self.outerRingTableWidget1.setObjectName("outerRingTableWidget1")
         self.outerRingTableWidget1.setColumnCount(3)
         self.outerRingTableWidget1.setRowCount(10)
-        item = QtWidgets.QTableWidgetItem()
-        self.outerRingTableWidget1.setVerticalHeaderItem(0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.outerRingTableWidget1.setVerticalHeaderItem(1, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.outerRingTableWidget1.setVerticalHeaderItem(2, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.outerRingTableWidget1.setVerticalHeaderItem(3, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.outerRingTableWidget1.setVerticalHeaderItem(4, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.outerRingTableWidget1.setVerticalHeaderItem(5, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.outerRingTableWidget1.setVerticalHeaderItem(6, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.outerRingTableWidget1.setVerticalHeaderItem(7, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.outerRingTableWidget1.setVerticalHeaderItem(8, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.outerRingTableWidget1.setVerticalHeaderItem(9, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.outerRingTableWidget1.setHorizontalHeaderItem(0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.outerRingTableWidget1.setHorizontalHeaderItem(1, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.outerRingTableWidget1.setHorizontalHeaderItem(2, item)
+        self.outerRingTableWidget1.setStyleSheet("""
+                    QTableWidget {
+                        gridline-color: black;  /* Set gridline color */
+                    }
+                """)
+        self.adjust_table_widget_no_scale(self.outerRingTableWidget1)
+
+        # QTableWidget outerRingTableWidget2
         self.outerRingTableWidget2 = QtWidgets.QTableWidget(self.outputTab)
-        self.outerRingTableWidget2.setGeometry(QtCore.QRect(510, 380, 221, 151))
-        self.outerRingTableWidget2.setObjectName("outerRingTableWidget2")
-        self.outerRingTableWidget2.setColumnCount(3)
-        self.outerRingTableWidget2.setRowCount(10)
-        item = QtWidgets.QTableWidgetItem()
-        self.outerRingTableWidget2.setVerticalHeaderItem(0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.outerRingTableWidget2.setVerticalHeaderItem(1, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.outerRingTableWidget2.setVerticalHeaderItem(2, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.outerRingTableWidget2.setVerticalHeaderItem(3, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.outerRingTableWidget2.setVerticalHeaderItem(4, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.outerRingTableWidget2.setVerticalHeaderItem(5, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.outerRingTableWidget2.setVerticalHeaderItem(6, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.outerRingTableWidget2.setVerticalHeaderItem(7, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.outerRingTableWidget2.setVerticalHeaderItem(8, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.outerRingTableWidget2.setVerticalHeaderItem(9, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.outerRingTableWidget2.setHorizontalHeaderItem(0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.outerRingTableWidget2.setHorizontalHeaderItem(1, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.outerRingTableWidget2.setHorizontalHeaderItem(2, item)
-        self.flangeTableWidget2 = QtWidgets.QTableWidget(self.outputTab)
-        self.flangeTableWidget2.setGeometry(QtCore.QRect(500, 630, 221, 111))
-        self.flangeTableWidget2.setObjectName("flangeTableWidget2")
-        self.flangeTableWidget2.setColumnCount(3)
-        self.flangeTableWidget2.setRowCount(10)
-        item = QtWidgets.QTableWidgetItem()
-        self.flangeTableWidget2.setVerticalHeaderItem(0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.flangeTableWidget2.setVerticalHeaderItem(1, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.flangeTableWidget2.setVerticalHeaderItem(2, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.flangeTableWidget2.setVerticalHeaderItem(3, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.flangeTableWidget2.setVerticalHeaderItem(4, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.flangeTableWidget2.setVerticalHeaderItem(5, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.flangeTableWidget2.setVerticalHeaderItem(6, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.flangeTableWidget2.setVerticalHeaderItem(7, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.flangeTableWidget2.setVerticalHeaderItem(8, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.flangeTableWidget2.setVerticalHeaderItem(9, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.flangeTableWidget2.setHorizontalHeaderItem(0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.flangeTableWidget2.setHorizontalHeaderItem(1, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.flangeTableWidget2.setHorizontalHeaderItem(2, item)
-        self.flangeLabel = QtWidgets.QLabel(self.outputTab)
-        self.flangeLabel.setGeometry(QtCore.QRect(30, 660, 81, 20))
+        self.outerRingTableWidget2.x = 510
+        self.outerRingTableWidget2.y = 385
+        self.outerRingTableWidget2.w = 221
+        self.outerRingTableWidget2.h = 126
+        self.outerRingTableWidget2.move(self.outerRingTableWidget2.x, self.outerRingTableWidget2.y)
+        self.outerRingTableWidget2.setFixedSize(self.outerRingTableWidget2.w,
+                                                self.outerRingTableWidget2.h)
         font = QtGui.QFont()
         font.setFamily("MS Shell Dlg 2")
         font.setPointSize(11)
+        self.outerRingTableWidget2.setFont(font)
+        self.outerRingTableWidget2.setLineWidth(1)
+        self.outerRingTableWidget2.setMidLineWidth(1)
+        self.outerRingTableWidget2.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.outerRingTableWidget2.setWordWrap(True)
+        self.outerRingTableWidget2.setObjectName("outerRingTableWidget2")
+        self.outerRingTableWidget2.setColumnCount(2)
+        self.outerRingTableWidget2.setRowCount(5)
+        self.outerRingTableWidget2.setStyleSheet("""
+                       QTableWidget {
+                           gridline-color: black;  /* Set gridline color */
+                       }
+                   """)
+        self.adjust_table_widget_no_scale(self.outerRingTableWidget2)
+
+        # flangeLabel
+        self.flangeLabel = QtWidgets.QLabel(self.outputTab)
+        font = QtGui.QFont()
+        font.setFamily("MS Shell Dlg 2")
+        font.setPointSize(11)
+        font.setBold(True)
         self.flangeLabel.setFont(font)
-        self.flangeLabel.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
+        self.flangeLabel.x = 40
+        self.flangeLabel.y = 660
+        self.flangeLabel.w = 81
+        self.flangeLabel.h = 20
+        self.flangeLabel.move(self.flangeLabel.x, self.flangeLabel.y)
+        self.flangeLabel.setFixedSize(self.flangeLabel.w, self.flangeLabel.h)
+        self.flangeLabel.setAlignment(QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
         self.flangeLabel.setObjectName("flangeLabel")
+
+        # QTableWidget flangeTableWidget1
         self.flangeTableWidget1 = QtWidgets.QTableWidget(self.outputTab)
-        self.flangeTableWidget1.setGeometry(QtCore.QRect(150, 630, 321, 161))
+        self.flangeTableWidget1.x = 150
+        self.flangeTableWidget1.y = 635
+        self.flangeTableWidget1.w = 321
+        self.flangeTableWidget1.h = 151
+        self.flangeTableWidget1.move(self.flangeTableWidget1.x, self.flangeTableWidget1.y)
+        self.flangeTableWidget1.setFixedSize(self.flangeTableWidget1.w,
+                                                self.flangeTableWidget1.h)
+        font = QtGui.QFont()
+        font.setFamily("MS Shell Dlg 2")
+        font.setPointSize(11)
+        self.flangeTableWidget1.setFont(font)
+        self.flangeTableWidget1.setLineWidth(1)
+        self.flangeTableWidget1.setMidLineWidth(1)
+        self.flangeTableWidget1.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.flangeTableWidget1.setWordWrap(True)
         self.flangeTableWidget1.setObjectName("flangeTableWidget1")
         self.flangeTableWidget1.setColumnCount(3)
-        self.flangeTableWidget1.setRowCount(10)
-        item = QtWidgets.QTableWidgetItem()
-        self.flangeTableWidget1.setVerticalHeaderItem(0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.flangeTableWidget1.setVerticalHeaderItem(1, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.flangeTableWidget1.setVerticalHeaderItem(2, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.flangeTableWidget1.setVerticalHeaderItem(3, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.flangeTableWidget1.setVerticalHeaderItem(4, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.flangeTableWidget1.setVerticalHeaderItem(5, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.flangeTableWidget1.setVerticalHeaderItem(6, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.flangeTableWidget1.setVerticalHeaderItem(7, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.flangeTableWidget1.setVerticalHeaderItem(8, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.flangeTableWidget1.setVerticalHeaderItem(9, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.flangeTableWidget1.setHorizontalHeaderItem(0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.flangeTableWidget1.setHorizontalHeaderItem(1, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.flangeTableWidget1.setHorizontalHeaderItem(2, item)
-        self.noteFlangeLable = QtWidgets.QLabel(self.outputTab)
-        self.noteFlangeLable.setGeometry(QtCore.QRect(240, 810, 371, 20))
+        self.flangeTableWidget1.setRowCount(6)
+        self.flangeTableWidget1.setStyleSheet("""
+                            QTableWidget {
+                                gridline-color: black;  /* Set gridline color */
+                            }
+                        """)
+        self.adjust_table_widget_no_scale(self.flangeTableWidget1)
+
+        # QTableWidget flangeTableWidget2
+        self.flangeTableWidget2 = QtWidgets.QTableWidget(self.outputTab)
+        self.flangeTableWidget2.x = 500
+        self.flangeTableWidget2.y = 635
+        self.flangeTableWidget2.w = 221
+        self.flangeTableWidget2.h = 51
+        self.flangeTableWidget2.move(self.flangeTableWidget2.x, self.flangeTableWidget2.y)
+        self.flangeTableWidget2.setFixedSize(self.flangeTableWidget2.w,
+                                                self.flangeTableWidget2.h)
         font = QtGui.QFont()
         font.setFamily("MS Shell Dlg 2")
         font.setPointSize(11)
-        self.noteFlangeLable.setFont(font)
-        self.noteFlangeLable.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.noteFlangeLable.setObjectName("noteFlangeLable")
+        self.flangeTableWidget2.setFont(font)
+        self.flangeTableWidget2.setLineWidth(1)
+        self.flangeTableWidget2.setMidLineWidth(1)
+        self.flangeTableWidget2.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.flangeTableWidget2.setWordWrap(True)
+        self.flangeTableWidget2.setObjectName("flangeTableWidget2")
+        self.flangeTableWidget2.setColumnCount(2)
+        self.flangeTableWidget2.setRowCount(2)
+        self.flangeTableWidget2.setStyleSheet("""
+                               QTableWidget {
+                                   gridline-color: black;  /* Set gridline color */
+                               }
+                           """)
+        self.adjust_table_widget_no_scale(self.flangeTableWidget2)
+
+        # noteFlangeLabel
+        self.noteFlangeLabel = QtWidgets.QLabel(self.outputTab)
+        font = QtGui.QFont()
+        font.setFamily("MS Shell Dlg 2")
+        font.setPointSize(11)
+        font.setBold(True)
+        self.noteFlangeLabel.setFont(font)
+        self.noteFlangeLabel.x = 240
+        self.noteFlangeLabel.y = 810
+        self.noteFlangeLabel.w = 371
+        self.noteFlangeLabel.h = 20
+        self.noteFlangeLabel.move(self.noteFlangeLabel.x, self.noteFlangeLabel.y)
+        self.noteFlangeLabel.setFixedSize(self.noteFlangeLabel.w, self.noteFlangeLabel.h)
+        self.noteFlangeLabel.setAlignment(QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+        self.noteFlangeLabel.setObjectName("noteFlangeLabel")
+
         self.tabWidget.addTab(self.outputTab, "")
+
+        # symbols Tab
         self.symbolsTab = QtWidgets.QWidget()
         self.symbolsTab.setObjectName("symbolsTab")
-        self.Table1 = QtWidgets.QLabel(self.symbolsTab)
-        self.Table1.setGeometry(QtCore.QRect(70, 40, 611, 781))
-        self.Table1.setText("")
-        self.Table1.setPixmap(QtGui.QPixmap("../testGitHub/docs/RKBlogo2.png"))
-        self.Table1.setScaledContents(True)
-        self.Table1.setObjectName("Table1")
+        # symbols Label
+        self.symbolsLabel = QtWidgets.QLabel(self.symbolsTab)
+        self.symbolsLabel.x = 300
+        self.symbolsLabel.y = 50
+        self.symbolsLabel.w = 281
+        self.symbolsLabel.h = 31
+        self.symbolsLabel.move(self.symbolsLabel.x, self.symbolsLabel.y)
+        self.symbolsLabel.setFixedSize(self.symbolsLabel.w, self.symbolsLabel.h)
+        self.symbolsLabel.setStyleSheet("color: rgb(170, 0, 0);")
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setWeight(75)
+        self.symbolsLabel.setFont(font)
+        self.symbolsLabel.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.symbolsLabel.setAlignment(QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+        self.symbolsLabel.setObjectName("symbolsLabel")
+
+        # symbols  Line
+        self.symbolsLine = QtWidgets.QFrame(self.symbolsTab)
+        self.symbolsLine.x = 10
+        self.symbolsLine.y = 100
+        self.symbolsLine.w = 716
+        self.symbolsLine.h = 21
+        self.symbolsLine.move(self.symbolsLine.x, self.symbolsLine.y)
+        self.symbolsLine.setFixedSize(self.symbolsLine.w, self.symbolsLine.h)
+        self.symbolsLine.setStyleSheet("background-color: rgb(0, 0, 127);")
+        self.symbolsLine.setFrameShape(QtWidgets.QFrame.HLine)
+        self.symbolsLine.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.symbolsLine.setObjectName("symbolsLine")
+
+        # QLabel for drawing1
+        self.drawing1 = QtWidgets.QLabel(self.symbolsTab)
+        self.drawing1.x = 10
+        self.drawing1.y = 160
+        self.drawing1.w = 350
+        self.drawing1.h = 651
+        self.drawing1.setGeometry(QtCore.QRect(self.drawing1.x, self.drawing1.y, self.drawing1.w, self.drawing1.h))
+        self.drawing1.setText("")
+        self.drawing1.setPixmap(QtGui.QPixmap("../testGitHub/docs/RKBlogo2.png"))
+        self.drawing1.setScaledContents(True)
+        self.drawing1.setObjectName("drawing1")
+
+        # QLabel for drawing2
+        self.drawing2 = QtWidgets.QLabel(self.symbolsTab)
+        self.drawing2.x = 375
+        self.drawing2.y = 160
+        self.drawing2.w = 350
+        self.drawing2.h = 651
+        self.drawing2.setGeometry(QtCore.QRect(self.drawing2.x, self.drawing2.y, self.drawing2.w, self.drawing2.h))
+        self.drawing2.setText("")
+        self.drawing2.setPixmap(QtGui.QPixmap("../testGitHub/docs/RKBlogo2.png"))
+        self.drawing2.setScaledContents(True)
+        self.drawing2.setObjectName("drawing2")
+
+
+
         self.tabWidget.addTab(self.symbolsTab, "")
-        MainWindow.setCentralWidget(self.centralwidget)
+
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 808, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 892, 22))
         self.menubar.setObjectName("menubar")
+        self.menuFile = QtWidgets.QMenu(self.menubar)
+        self.menuFile.setObjectName("menuFile")
+        self.menuTools = QtWidgets.QMenu(self.menubar)
+        self.menuTools.setObjectName("menuTools")
+        self.menuHelp = QtWidgets.QMenu(self.menubar)
+        self.menuHelp.setObjectName("menuHelp")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
+        self.actionNew = QtWidgets.QAction(MainWindow)
+        self.actionNew.setObjectName("actionNew")
+        self.actionOpen = QtWidgets.QAction(MainWindow)
+        self.actionOpen.setObjectName("actionOpen")
+        self.actionSave = QtWidgets.QAction(MainWindow)
+        self.actionSave.setObjectName("actionSave")
+        self.actionSave_as = QtWidgets.QAction(MainWindow)
+        self.actionSave_as.setObjectName("actionSave_as")
+        self.actionPrint = QtWidgets.QAction(MainWindow)
+        self.actionPrint.setObjectName("actionPrint")
+        self.actionClose = QtWidgets.QAction(MainWindow)
+        self.actionClose.setObjectName("actionClose")
+        self.actionAbout = QtWidgets.QAction(MainWindow)
+        self.actionAbout.setObjectName("actionAbout")
+        self.actionHelp = QtWidgets.QAction(MainWindow)
+        self.actionHelp.setObjectName("actionHelp")
+        self.actionCalculate = QtWidgets.QAction(MainWindow)
+        self.actionCalculate.setObjectName("actionCalculate")
+        self.actionReset = QtWidgets.QAction(MainWindow)
+        self.actionReset.setObjectName("actionReset")
+        self.menuFile.addAction(self.actionNew)
+        self.menuFile.addAction(self.actionOpen)
+        self.menuFile.addAction(self.actionSave)
+        self.menuFile.addAction(self.actionSave_as)
+        self.menuFile.addAction(self.actionPrint)
+        self.menuFile.addAction(self.actionClose)
+        self.menuTools.addAction(self.actionCalculate)
+        self.menuTools.addAction(self.actionReset)
+        self.menuHelp.addAction(self.actionAbout)
+        self.menuHelp.addAction(self.actionHelp)
+        self.menubar.addAction(self.menuFile.menuAction())
+        self.menubar.addAction(self.menuTools.menuAction())
+        self.menubar.addAction(self.menuHelp.menuAction())
+
+        # Default font size for scaling
+        self.font11 = 11
+        self.font12 = 12
+        self.font14 = 14
+
+        # Set High DPI scaling
+        QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
+        QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
+
+        # Connect screenChanged signal after window is shown
+        MainWindow.showEvent = self.showEvent
 
         self.retranslateUi(MainWindow)
         self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+        scroll_layout.addWidget(self.tabWidget)
+        scroll_widget.setLayout(scroll_layout)  # Ensure layout is set
+
+        # Set scroll area widget
+        scroll_area.setWidget(scroll_widget)
+
+        # Add scroll area to main layout
+        main_layout.addWidget(scroll_area)
+        self.update_sizes()
+
+        self.MainWindow = MainWindow
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        # make directory for local files
+        path = os.path.join('C:/', 'Documents and Settings', os.getlogin(), 'Documents/RKB App Data')
+        try:
+            os.mkdir(path)
+        except OSError as error:
+            print(error)
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        __sortingEnabled = self.flangePresenceListWidget.isSortingEnabled()
+        self.flangePresenceListWidget.setSortingEnabled(False)
+        item = self.flangePresenceListWidget.item(0)
+        item.setText(_translate("MainWindow", "Normal"))
+        item = self.flangePresenceListWidget.item(1)
+        item.setText(_translate("MainWindow", "Flanged outer ring"))
+        self.flangePresenceListWidget.setSortingEnabled(__sortingEnabled)
+        self.innerRingSymmetryLabel.setText(_translate("MainWindow", "<html><head/><body><p>Inner ring</p></body></html>"))
+        self.outerRingSymmetryLabel.setText(
+            _translate("MainWindow", "<html><head/><body><p>Outer ring</p></body></html>"))
+        self.stiffnessLabel.setText(
+            _translate("MainWindow", "<html><head/><body><p>Stiffness</p></body></html>"))
         self.bearingTypeLabel.setText(_translate("MainWindow", "<html><head/><body><p>Bearing type</p></body></html>"))
-        self.outerDiameterLabel.setText(_translate("MainWindow", "<html><head/><body><p>Outer diameter D, mm</p></body></html>"))
+        self.outerDiameterLabel.setText(
+            _translate("MainWindow", "<html><head/><body><p>Outer diameter D, mm</p></body></html>"))
+        self.orFlangeDiameterLabel.setText(
+            _translate("MainWindow", "<html><head/><body><p>Outer ring flange diameter D<span style=\" vertical-align:sub;\">1</span>, mm</p></body></html>"))
+        # Inner Ring Symmetry List Widget items
+        __sortingEnabled = self.innerRingSymmetryListWidget.isSortingEnabled()
+        self.innerRingSymmetryListWidget.setSortingEnabled(False)
+        item = self.innerRingSymmetryListWidget.item(0)
+        item.setText(_translate("MainWindow", "Symmetrical"))
+        item = self.innerRingSymmetryListWidget.item(1)
+        item.setText(_translate("MainWindow", "Asymmetrical"))
+        self.innerRingSymmetryListWidget.setSortingEnabled(__sortingEnabled)
+
+        # Outer Ring Symmetry List Widget items
+        __sortingEnabled = self.outerRingSymmetryListWidget.isSortingEnabled()
+        self.outerRingSymmetryListWidget.setSortingEnabled(False)
+        item = self.outerRingSymmetryListWidget.item(0)
+        item.setText(_translate("MainWindow", "Symmetrical"))
+        item = self.outerRingSymmetryListWidget.item(1)
+        item.setText(_translate("MainWindow", "Asymmetrical"))
+        self.outerRingSymmetryListWidget.setSortingEnabled(__sortingEnabled)
+
         __sortingEnabled = self.precisionListWidget.isSortingEnabled()
         self.precisionListWidget.setSortingEnabled(False)
         item = self.precisionListWidget.item(0)
@@ -837,34 +1017,292 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "TQI"))
         self.bearingTypeListWidget.setSortingEnabled(__sortingEnabled)
         self.precisionLabel.setText(_translate("MainWindow", "<html><head/><body><p>Precision</p></body></html>"))
+
         self.printButton.setText(_translate("MainWindow", "Print"))
-        self.titleLabel.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:16pt;\">Tolerances (ISO 492:2023)</span><br/></p><p><span style=\" font-size:16pt;\">Metric Radial Tapered Roller Bearings </span></p></body></html>"))
+
+        self.titleLabel.setText(_translate("MainWindow",
+                                           "<html><head/><body><p><span style=\" font-size:16pt;\">Tolerances (ISO 492:2023)</span><br/></p><p><span style=\" font-size:16pt;\">Metric Radial Tapered Roller Bearings </span><span style=\" font-size:16pt; color:#aa0000;\"></span></p></body></html>"))
+
         self.partNoLabel.setText(_translate("MainWindow", "RKB P/N:"))
         self.inputDataLabel.setText(_translate("MainWindow", "Input Data"))
         self.calculateButton.setText(_translate("MainWindow", "Calculate"))
-        self.boreDiameterLabel.setText(_translate("MainWindow", "<html><head/><body><p>Bore diameter d, mm</p></body></html>"))
+
+        self.boreDiameterLabel.setText(_translate("MainWindow",
+                                                                "<html><head/><body><p>Bore diameter d, mm</p></body></html>"))
         self.resetButton.setText(_translate("MainWindow", "Reset"))
-        __sortingEnabled = self.flangePresenceListWidget.isSortingEnabled()
-        self.flangePresenceListWidget.setSortingEnabled(False)
-        item = self.flangePresenceListWidget.item(0)
-        item.setText(_translate("MainWindow", "Normal"))
-        item = self.flangePresenceListWidget.item(1)
-        item.setText(_translate("MainWindow", "Flanged outer ring"))
-        self.flangePresenceListWidget.setSortingEnabled(__sortingEnabled)
-        self.orFlangeDiameterLabel.setText(_translate("MainWindow", "<html><head/><body><p>Outer ring flange diameter D<span style=\" vertical-align:sub;\">1</span>, mm</p></body></html>"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.inputTab), _translate("MainWindow", "Input"))
-        self.outputLabel.setText(_translate("MainWindow", "<html><head/><body><p>Output Data</p><p><br/></p></body></html>"))
+
+        self.outputDataLabel.setText(_translate("MainWindow", "Output data"))
         self.innerRingLabel.setText(_translate("MainWindow", "<html><head/><body><p>Inner ring</p></body></html>"))
         self.outerRingLabel.setText(_translate("MainWindow", "<html><head/><body><p>Outer ring</p></body></html>"))
         self.flangeLabel.setText(_translate("MainWindow", "<html><head/><body><p>Flange</p></body></html>"))
-        self.noteFlangeLable.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" color:#aa0000;\">Note: For flanged outer ring t</span><span style=\" color:#aa0000; vertical-align:sub;\">ΔD1s</span><span style=\" color:#aa0000;\"> is allways in P0</span></p></body></html>"))
+        self.noteFlangeLabel.setText(_translate("MainWindow",
+                                           "<html><head/><body><p><span style=\" color:#aa0000;\">Note: For flanged outer ring t</span><span style=\" color:#aa0000; vertical-align:sub;\">ΔD1s</span><span style=\" color:#aa0000;\"> is always in P0</span></p></body></html>"))
+
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.outputTab), _translate("MainWindow", "Output"))
+        self.symbolsLabel.setText(_translate("MainWindow", "SYMBOLS"))
+
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.symbolsTab), _translate("MainWindow", "Symbols"))
+
+        self.menuFile.setTitle(_translate("MainWindow", "File"))
+        self.menuTools.setTitle(_translate("MainWindow", "Tools"))
+        self.menuHelp.setTitle(_translate("MainWindow", "Help"))
+        self.actionNew.setText(_translate("MainWindow", "New"))
+        self.actionOpen.setText(_translate("MainWindow", "Open"))
+        self.actionSave.setText(_translate("MainWindow", "Save"))
+        self.actionSave_as.setText(_translate("MainWindow", "Save as"))
+        self.actionPrint.setText(_translate("MainWindow", "Print"))
+        self.actionClose.setText(_translate("MainWindow", "Close"))
+        self.actionAbout.setText(_translate("MainWindow", "About"))
+        self.actionHelp.setText(_translate("MainWindow", "Help"))
+        self.actionCalculate.setText(_translate("MainWindow", "Calculate"))
+        self.actionReset.setText(_translate("MainWindow", "Reset"))
+
+    def adjust_table_widget(self, table, scale_factor):
+        # Adjust QTableWidget rows and columns
+        rows = table.rowCount()
+        for row in range(rows):
+            table.setRowHeight(row, int((table.h - 2) / rows * scale_factor))  # Scale row height
+        cols = table.columnCount()
+        for col in range(cols):
+            table.setColumnWidth(col, int((table.w - 2) / cols * scale_factor))  # Scale column width
+
+    def adjust_table_widget_no_scale(self, table):
+        # Adjust QTableWidget rows and columns
+        rows = table.rowCount()
+        for row in range(rows):
+            table.setRowHeight(row, int((table.h - 1) / rows))  # Scale row height
+        cols = table.columnCount()
+        for col in range(cols):
+            table.setColumnWidth(col, int((table.w - 1) / cols))  # Scale column width
+
+    def showEvent(self, event):
+        """Connect screenChanged signal and update sizes after the window is shown."""
+        # Connect screenChanged signal
+        if self.MainWindow.windowHandle():
+            self.MainWindow.windowHandle().screenChanged.connect(self.handle_screen_change)
+
+        # Perform initial size update
+        self.update_sizes()
+
+    def resizeEvent(self, event):
+        """Handle resizing of the main window."""
+        self.update_sizes()
+
+    def handle_screen_change(self):
+        """Handle changes to the screen (e.g., moving to a screen with a different DPI)."""
+        self.update_sizes()
+
+    def update_sizes(self):
+        """Adjust widget sizes, fonts, and positions dynamically."""
+        # Ensure windowHandle and screen are available
+        if not self.MainWindow.windowHandle() or not self.MainWindow.windowHandle().screen():
+            return  # Do nothing if the screen is unavailable
+
+        # Get current scaling factor based on the logical DPI of the screen
+        screen = self.MainWindow.windowHandle().screen()
+        scale_factor = screen.logicalDotsPerInch() / 96.0  # 96 DPI is the baseline
+        w = int(round(self.MainWindow.w * scale_factor, 0))
+
+        screen = QGuiApplication.screenAt(self.MainWindow.frameGeometry().center())
+        screen_rect = screen.availableGeometry()
+        available_height = screen_rect.height() * 0.90  # 90% of available screen height
+        # h = int(available_height)
+        h = self.MainWindow.h
+        self.MainWindow.setFixedSize(w, h)
+
+        font_size14 = int(self.font14 * scale_factor)
+        font_size12 = int(self.font12 * scale_factor)
+        font_size11 = int(self.font11 * scale_factor)
+
+        # Adjust tab widget size
+        self.tabWidget.setGeometry(
+            self.tabWidget.x, self.tabWidget.y, int(self.tabWidget.w * scale_factor),
+            int(self.tabWidget.h * scale_factor)
+        )  # Scale tab widget
+
+        # Adjust size and position for Qwidgets
+        # inputTab
+        self.set_geometry(self.RKBLogo, scale_factor)
+        self.set_geometry(self.inputLine, scale_factor)
+        self.set_geometry(self.symbolsLine, scale_factor)
+        self.set_geometry(self.outputLine, scale_factor)
+
+        self.set_fixed_size(self.titleLabel, scale_factor)
+        self.set_fixed_size(self.partNoLabel, scale_factor)
+        self.set_fixed_size(self.partNoTextEdit, scale_factor)
+        self.set_fixed_size(self.inputDataLabel, scale_factor)
+        self.set_fixed_size(self.inputLine, scale_factor)
+        self.set_fixed_size(self.innerRingSymmetryLabel, scale_factor)
+        self.set_fixed_size(self.innerRingSymmetryListWidget, scale_factor)
+        self.set_fixed_size(self.outerRingSymmetryLabel, scale_factor)
+        self.set_fixed_size(self.outerRingSymmetryListWidget, scale_factor)
+        self.set_fixed_size(self.stiffnessLabel, scale_factor)
+        self.set_fixed_size(self.stiffnessLineEdit, scale_factor)
+        self.set_fixed_size(self.bearingTypeLabel, scale_factor)
+        self.set_fixed_size(self.bearingTypeListWidget, scale_factor)
+        self.set_fixed_size(self.flangePresenceListWidget, scale_factor)
+        self.set_fixed_size(self.flangeTypeListWidget, scale_factor)
+        self.set_fixed_size(self.boreDiameterLabel, scale_factor)
+        self.set_fixed_size(self.boreDiameterLineEdit, scale_factor)
+        self.set_fixed_size(self.outerDiameterLabel, scale_factor)
+        self.set_fixed_size(self.outerDiameterLineEdit, scale_factor)
+        self.set_fixed_size(self.orFlangeDiameterLabel, scale_factor)
+        self.set_fixed_size(self.orFlangeDiameterLineEdit, scale_factor)
+        self.set_fixed_size(self.precisionLabel, scale_factor)
+        self.set_fixed_size(self.precisionListWidget, scale_factor)
+        self.set_fixed_size(self.errorLabel, scale_factor)
+        self.set_fixed_size(self.calculateButton, scale_factor)
+        self.set_fixed_size(self.resetButton, scale_factor)
+        self.set_fixed_size(self.printButton, scale_factor)
+        self.set_fixed_size(self.RKBLogo, scale_factor)
+
+        # output Tab
+        self.set_fixed_size(self.outputDataLabel, scale_factor)
+        self.set_fixed_size(self.outputLine, scale_factor)
+        self.set_fixed_size(self.innerRingLabel, scale_factor)
+        self.set_fixed_size(self.innerRingTableWidget1, scale_factor)
+        self.set_fixed_size(self.innerRingTableWidget2, scale_factor)
+        self.set_fixed_size(self.outerRingLabel, scale_factor)
+        self.set_fixed_size(self.outerRingTableWidget1, scale_factor)
+        self.set_fixed_size(self.outerRingTableWidget2, scale_factor)
+        self.set_fixed_size(self.flangeLabel, scale_factor)
+        self.set_fixed_size(self.flangeTableWidget1, scale_factor)
+        self.set_fixed_size(self.flangeTableWidget2, scale_factor)
+        self.set_fixed_size(self.noteFlangeLabel, scale_factor)
+
+        # symbols Tab
+        self.set_fixed_size(self.symbolsLabel, scale_factor)
+        self.set_fixed_size(self.symbolsLine, scale_factor)
+        self.set_fixed_size(self.drawing1, scale_factor)
+        self.set_fixed_size(self.drawing2, scale_factor)
+
+        # Adjust QTableWidget dimensions
+        self.adjust_table_widget(self.innerRingTableWidget1, scale_factor)
+        self.adjust_table_widget(self.innerRingTableWidget2, scale_factor)
+        self.adjust_table_widget(self.outerRingTableWidget1, scale_factor)
+        self.adjust_table_widget(self.outerRingTableWidget2, scale_factor)
+        self.adjust_table_widget(self.flangeTableWidget1, scale_factor)
+        self.adjust_table_widget(self.flangeTableWidget2, scale_factor)
+
+        # Reposition widgets
+        # inputTab
+        self.titleLabel.move(int(self.titleLabel.x * scale_factor), int(self.titleLabel.y * scale_factor))
+        self.partNoLabel.move(int(self.partNoLabel.x * scale_factor), int(self.partNoLabel.y * scale_factor))
+        self.inputDataLabel.move(int(self.inputDataLabel.x * scale_factor), int(self.inputDataLabel.y * scale_factor))
+        self.partNoTextEdit.move(int(self.partNoTextEdit.x * scale_factor), int(self.partNoTextEdit.y * scale_factor))
+        self.inputLine.move(int(self.inputLine.x * scale_factor), int(self.inputLine.y * scale_factor))
+        self.innerRingSymmetryLabel.move(
+            int(self.innerRingSymmetryLabel.x * scale_factor),
+            int(self.innerRingSymmetryLabel.y * scale_factor)
+        )
+        self.innerRingSymmetryListWidget.move(
+            int(self.innerRingSymmetryListWidget.x * scale_factor),
+            int(self.innerRingSymmetryListWidget.y * scale_factor)
+        )
+        self.outerRingSymmetryLabel.move(
+            int(self.outerRingSymmetryLabel.x * scale_factor),
+            int(self.outerRingSymmetryLabel.y * scale_factor)
+        )
+        self.outerRingSymmetryListWidget.move(
+            int(self.outerRingSymmetryListWidget.x * scale_factor),
+            int(self.outerRingSymmetryListWidget.y * scale_factor)
+        )
+        self.stiffnessLabel.move(
+            int(self.stiffnessLabel.x * scale_factor),
+            int(self.stiffnessLabel.y * scale_factor)
+        )
+        self.stiffnessLineEdit.move(
+            int(self.stiffnessLineEdit.x * scale_factor),
+            int(self.stiffnessLineEdit.y * scale_factor)
+        )
+        self.bearingTypeLabel.move(int(self.bearingTypeLabel.x * scale_factor),
+                                   int(self.bearingTypeLabel.y * scale_factor))
+        self.bearingTypeListWidget.move(int(self.bearingTypeListWidget.x * scale_factor),
+                                        int(self.bearingTypeListWidget.y * scale_factor))
+        self.flangePresenceListWidget.move(int(self.flangePresenceListWidget.x * scale_factor),
+                                                  int(self.flangePresenceListWidget.y * scale_factor))
+        self.flangeTypeListWidget.move(int(self.flangeTypeListWidget.x * scale_factor),
+                                           int(self.flangeTypeListWidget.y * scale_factor))
+        self.boreDiameterLabel.move(int(self.boreDiameterLabel.x * scale_factor),
+                                                  int(self.boreDiameterLabel.y * scale_factor))
+        self.boreDiameterLineEdit.move(int(self.boreDiameterLineEdit.x * scale_factor),
+                                                     int(self.boreDiameterLineEdit.y * scale_factor))
+        self.outerDiameterLabel.move(int(self.outerDiameterLabel.x * scale_factor),
+                                                  int(self.outerDiameterLabel.y * scale_factor))
+        self.outerDiameterLineEdit.move(int(self.outerDiameterLineEdit.x * scale_factor),
+                                                     int(self.outerDiameterLineEdit.y * scale_factor))
+        self.orFlangeDiameterLabel.move(int(self.orFlangeDiameterLabel.x * scale_factor),
+                                     int(self.orFlangeDiameterLabel.y * scale_factor))
+        self.orFlangeDiameterLineEdit.move(int(self.orFlangeDiameterLineEdit.x * scale_factor),
+                                        int(self.orFlangeDiameterLineEdit.y * scale_factor))
+
+        self.precisionLabel.move(int(self.precisionLabel.x * scale_factor), int(self.precisionLabel.y * scale_factor))
+        self.precisionListWidget.move(int(self.precisionListWidget.x * scale_factor),
+                                      int(self.precisionListWidget.y * scale_factor))
+        self.errorLabel.move(int(self.errorLabel.x * scale_factor), int(self.errorLabel.y * scale_factor))
+        self.calculateButton.move(int(self.calculateButton.x * scale_factor),
+                                  int(self.calculateButton.y * scale_factor))
+        self.resetButton.move(int(self.resetButton.x * scale_factor), int(self.resetButton.y * scale_factor))
+        self.printButton.move(int(self.printButton.x * scale_factor), int(self.printButton.y * scale_factor))
+        self.RKBLogo.move(int(self.RKBLogo.x * scale_factor), int(self.RKBLogo.y * scale_factor))
+
+        # output Tab
+        self.outputDataLabel.move(int(self.outputDataLabel.x * scale_factor),
+                                  int(self.outputDataLabel.y * scale_factor))
+        self.outputLine.move(int(self.outputLine.x * scale_factor),
+                             int(self.outputLine.y * scale_factor))
+        self.innerRingLabel.move(int(self.innerRingLabel.x * scale_factor),
+                                 int(self.innerRingLabel.y * scale_factor))
+        self.innerRingTableWidget1.move(int(self.innerRingTableWidget1.x * scale_factor),
+                                        int(self.innerRingTableWidget1.y * scale_factor))
+        self.innerRingTableWidget2.move(int(self.innerRingTableWidget2.x * scale_factor),
+                                        int(self.innerRingTableWidget2.y * scale_factor))
+        self.outerRingLabel.move(int(self.outerRingLabel.x * scale_factor),
+                                 int(self.outerRingLabel.y * scale_factor))
+        self.outerRingTableWidget1.move(int(self.outerRingTableWidget1.x * scale_factor),
+                                        int(self.outerRingTableWidget1.y * scale_factor))
+        self.outerRingTableWidget2.move(int(self.outerRingTableWidget2.x * scale_factor),
+                                        int(self.outerRingTableWidget2.y * scale_factor))
+        self.flangeLabel.move(int(self.flangeLabel.x * scale_factor),
+                                 int(self.flangeLabel.y * scale_factor))
+        self.flangeTableWidget1.move(int(self.flangeTableWidget1.x * scale_factor),
+                                        int(self.flangeTableWidget1.y * scale_factor))
+        self.flangeTableWidget2.move(int(self.flangeTableWidget2.x * scale_factor),
+                                        int(self.flangeTableWidget2.y * scale_factor))
+        self.noteFlangeLabel.move(int(self.noteFlangeLabel.x * scale_factor),
+                              int(self.noteFlangeLabel.y * scale_factor))
+
+        # Symbols Tab
+        self.symbolsLabel.move(int(self.symbolsLabel.x * scale_factor),
+                               int(self.symbolsLabel.y * scale_factor))
+
+        self.symbolsLine.move(int(self.symbolsLine.x * scale_factor),
+                              int(self.symbolsLine.y * scale_factor))
+
+        self.drawing1.move(int(self.drawing1.x * scale_factor),
+                           int(self.drawing1.y * scale_factor))
+        self.drawing2.move(int(self.drawing2.x * scale_factor),
+                           int(self.drawing2.y * scale_factor))
+
+    def set_geometry(self, widget, scale_factor):
+        widget.setGeometry(
+            int(widget.x * scale_factor), int(widget.y * scale_factor), int(widget.w * scale_factor),
+            int(widget.h * scale_factor)
+        )  # Adjust position and size
+
+    def set_fixed_size(self, widget, scale_factor):
+        widget.setFixedSize(
+            int(widget.w * scale_factor), int(widget.h * scale_factor)
+        )  # Scale width and height
 
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
+    app.setAttribute(Qt.AA_EnableHighDpiScaling)
+    app.setAttribute(Qt.AA_UseHighDpiPixmaps)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
