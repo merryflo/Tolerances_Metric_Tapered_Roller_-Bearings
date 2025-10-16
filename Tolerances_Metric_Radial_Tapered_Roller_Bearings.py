@@ -21,8 +21,6 @@ from file_context import Context
 from dotenv import load_dotenv
 from PyQt5.QtCore import Qt, QTimer
 
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 
 def configure_logging():
@@ -52,12 +50,6 @@ def configure_logging():
 def is_dev():
     return os.getenv("ENV") == "dev"
 
-
-def table_resource(table_name):
-    if is_dev():
-        return table_name
-    else:
-        return resource_path(table_name)
 
 
 def resource_path(relative_path):
@@ -167,35 +159,12 @@ class RichTextDelegate(QtWidgets.QStyledItemDelegate):
             focus_opt.backgroundColor = opt.palette.highlight().color()
             style.drawPrimitive(QtWidgets.QStyle.PE_FrameFocusRect, focus_opt, painter, opt.widget)
 
-    def sizeHint(self, option, index):
-        opt = QtWidgets.QStyleOptionViewItem(option)
-        self.initStyleOption(opt, index)
-        text = index.data(QtCore.Qt.DisplayRole) or ""
-        if "<sub>" in text or "<sup>" in text or text.lstrip().startswith("<"):
-            doc = QtGui.QTextDocument()
-            doc.setDefaultFont(opt.font)
-            doc.setDefaultStyleSheet("""
-                sub { font-size: 100%; vertical-align: -0.25em; }
-                sup { font-size: 100%; vertical-align:  0.35em; }
-            """)
-            # keep the same horizontal alignment wrapper
-            if opt.displayAlignment & QtCore.Qt.AlignHCenter:
-                align_h = "center"
-            elif opt.displayAlignment & QtCore.Qt.AlignRight:
-                align_h = "right"
-            else:
-                align_h = "left"
-            doc.setHtml(f"<div style='text-align:{align_h};'>{text}</div>")
-            return doc.size().toSize()
-        return super().sizeHint(opt, index)
-
-
 
 class Window(QMainWindow):
     c = Context("[Untitled]", "", "")
     programName = "Tolerances_Metric_Radial_Tapered_Roller_Bearings"
-    programVersion = "Version 1.0.0-beta"
-    lastUpdated = "02.10.2025"
+    programVersion = "Version 1.1.0-beta"
+    lastUpdated = "15.10.2025"
     plot_in_progress = 0
     tables = []
 
@@ -232,11 +201,7 @@ class Window(QMainWindow):
         QApplication.instance().screenAdded.connect(self.ui.handle_screen_change)
         QApplication.instance().screenRemoved.connect(self.ui.handle_screen_change)
 
-        # read tables
-        # table1, table2, table3, table4, table5, table6, table7, table8 = self.readExcelFiles(
-        #     table_resource(ISO199_2023_PATH), 'Normal_shaft', 'Normal_housing', 'Class 6_shaft', 'Class 6_housing', 'Class 5_shaft',
-        #     'Class 5_housing', 'Class 4_shaft', 'Class 4_housing', 2)
-        # self.tables.extend([table1, table2, table3, table4, table5, table6, table7, table8])
+
         self.T14_ISO492_2023 = self.readExcelFileISO492(self.resource_path(ISO492_2023_PATH), 'Taper Normal - inner', 3)
         self.T15_ISO492_2023 = self.readExcelFileISO492(self.resource_path(ISO492_2023_PATH), 'Taper Normal - outer', 3)
         self.T16_ISO492_2023 = self.readExcelFileISO492(self.resource_path(ISO492_2023_PATH), 'Taper Normal - width', 3)
@@ -422,99 +387,7 @@ class Window(QMainWindow):
 
         t.setSortingEnabled(__sortingEnabled)
 
-    # def customizeInnerRingTableWidget2(self):
-    #     __sortingEnabled = self.ui.innerRingTableWidget2.isSortingEnabled()
-    #     self.ui.innerRingTableWidget2.setSortingEnabled(False)
-    #     self.ui.innerRingTableWidget2.horizontalHeader().setVisible(False)
-    #     self.ui.innerRingTableWidget2.verticalHeader().setVisible(False)
-    #     self.ui.innerRingTableWidget2.setRowCount(5)
-    #     font = QtGui.QFont()
-    #     font.setFamily("MS Shell Dlg 2")
-    #     font.setPointSize(11)
-    #     font.setBold(True)
-    #     font.setWeight(75)
-    #     label = QLabel()
-    #     label.setText("t<sub>Vdsp</sub> ")
-    #     label.setAlignment(QtCore.Qt.AlignCenter)
-    #     label.setFont(font)
-    #     self.ui.innerRingTableWidget2.setCellWidget(0, 0, label)
-    #
-    #     item = QTableWidgetItem("")
-    #     item.setTextAlignment(QtCore.Qt.AlignCenter)
-    #     item.setFont(font)
-    #     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
-    #     self.ui.innerRingTableWidget2.setItem(0, 1, item)
-    #
-    #     label = QLabel()
-    #     label.setText("t<sub>Vdmp</sub> ")
-    #     label.setAlignment(QtCore.Qt.AlignCenter)
-    #     label.setFont(font)
-    #     self.ui.innerRingTableWidget2.setCellWidget(1, 0, label)
-    #
-    #     item = QTableWidgetItem("")
-    #     item.setTextAlignment(QtCore.Qt.AlignCenter)
-    #     item.setFont(font)
-    #     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
-    #     self.ui.innerRingTableWidget2.setItem(1, 1, item)
-    #
-    #     label = QLabel()
-    #     label.setText("t<sub>Kia</sub> ")
-    #     label.setAlignment(QtCore.Qt.AlignCenter)
-    #     label.setFont(font)
-    #     self.ui.innerRingTableWidget2.setCellWidget(2, 0, label)
-    #
-    #     item = QTableWidgetItem("")
-    #     item.setTextAlignment(QtCore.Qt.AlignCenter)
-    #     item.setFont(font)
-    #     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
-    #     self.ui.innerRingTableWidget2.setItem(2, 1, item)
-    #
-    #     label = QLabel()
-    #     label.setText("t<sub>Sd</sub> ")
-    #     label.setAlignment(QtCore.Qt.AlignCenter)
-    #     label.setFont(font)
-    #     label.setStyleSheet(f"background-color: rgb(240, 240, 240)")
-    #     self.ui.innerRingTableWidget2.setCellWidget(3, 0, label)
-    #
-    #     item = QTableWidgetItem("")
-    #     item.setTextAlignment(QtCore.Qt.AlignCenter)
-    #     item.setFont(font)
-    #     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
-    #     item.setBackground(QtGui.QColor(240, 240, 240))
-    #     self.ui.innerRingTableWidget2.setItem(3, 1, item)
-    #
-    #     label = QLabel()
-    #     label.setText("t<sub>Sia</sub> ")
-    #     label.setAlignment(QtCore.Qt.AlignCenter)
-    #     label.setFont(font)
-    #     label.setStyleSheet(f"background-color: rgb(240, 240, 240)")
-    #     self.ui.innerRingTableWidget2.setCellWidget(4, 0, label)
-    #
-    #     item = QTableWidgetItem("")
-    #     item.setTextAlignment(QtCore.Qt.AlignCenter)
-    #     item.setFont(font)
-    #     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
-    #     item.setBackground(QtGui.QColor(240, 240, 240))
-    #     self.ui.innerRingTableWidget2.setItem(4, 1, item)
-    #
-    #     rows = self.ui.innerRingTableWidget2.rowCount()
-    #     cols = self.ui.innerRingTableWidget2.columnCount()
-    #
-    #     # for row in range(rows):
-    #     #     self.ui.outerRingTableWidget2.setRowHeight(row, 25)
-    #
-    #     for col in range(cols):
-    #         self.ui.innerRingTableWidget2.setColumnWidth(col, 60)
-    #
-    #     for row in range(rows):
-    #         for col in range(cols):
-    #             item = self.ui.innerRingTableWidget2.item(row, col)
-    #             if item is None:  # Create a new item if the cell is empty
-    #                 item = QTableWidgetItem("")
-    #                 self.ui.innerRingTableWidget2.setItem(row, col, item)
-    #             item.setTextAlignment(QtCore.Qt.AlignCenter)  # Align center
-    #
-    #     self.ui.innerRingTableWidget2.setSortingEnabled(__sortingEnabled)
+
 
     def customizeInnerRingTableWidget2(self):
         t = self.ui.innerRingTableWidget2
@@ -897,6 +770,11 @@ class Window(QMainWindow):
                         self.ui.precisionListWidget.setCurrentRow(data["precision"])
                         self.ui.errorLabel.setText(data["error"])
                         self.ui.stiffnessLineEdit.setText(data["stiffness"])
+                        try:
+                            self.ui.fsLineEdit.setText(data["fs"])
+                        except Exception as ex:
+                            self.showWarning("fs missing! Click calculate and then save the file!")
+
                         # output Tab
 
                         font = QtGui.QFont()
@@ -910,7 +788,7 @@ class Window(QMainWindow):
                             item = QTableWidgetItem(str(data_dict[i]))
                             item.setTextAlignment(QtCore.Qt.AlignCenter)
                             item.setFont(font)
-                            if i > 5:
+                            if i > 7:
                                 item.setBackground(QtGui.QColor(240, 240, 240))
                             self.ui.innerRingTableWidget1.setItem(i, 2, item)
 
@@ -932,7 +810,7 @@ class Window(QMainWindow):
                             item = QTableWidgetItem(str(data_dict[i]))
                             item.setTextAlignment(QtCore.Qt.AlignCenter)
                             item.setFont(font)
-                            if i > 3:
+                            if i > 5:
                                 item.setBackground(QtGui.QColor(240, 240, 240))
                             self.ui.outerRingTableWidget1.setItem(i, 2, item)
 
@@ -1075,6 +953,7 @@ class Window(QMainWindow):
                        "irSymmetry": self.ui.innerRingSymmetryListWidget.currentRow(),
                        "orSymmetry": self.ui.outerRingSymmetryListWidget.currentRow(),
                        "stiffness": self.ui.stiffnessLineEdit.text(),
+                       "fs": self.ui.fsLineEdit.text(),
                        "bearingType": self.ui.bearingTypeListWidget.currentRow(),
                        "flangePresence": self.ui.flangePresenceListWidget.currentRow(),
                        "flangeType": self.ui.flangeTypeListWidget.currentRow(),
@@ -1218,6 +1097,7 @@ class Window(QMainWindow):
 
     def getStiffnessSeries(self, D, d):
         fs = (D - d)/(d ** 0.9)
+        self.ui.fsLineEdit.setText("{:.4f}".format(fs))
         if fs <= 0.535:
             return "A"
         elif fs <= 0.73:
@@ -1677,8 +1557,8 @@ class Window(QMainWindow):
                     rez[4] = self.T26_ISO492_2023[i_d_BCT][4]
                     rez[5] = self.T26_ISO492_2023[i_d_BCT][5]
                 if self.ui.flangePresenceListWidget.currentItem().text() == "Normal":
-                    rez[6] = self.T26_ISO492_2023[i_d_BCT][6]
-                    rez[7] = self.T26_ISO492_2023[i_d_BCT][7]
+                    rez[6] = self.T26_ISO492_2023[i_d_BCT][10]
+                    rez[7] = self.T26_ISO492_2023[i_d_BCT][11]
                 rez[8] = self.T26_ISO492_2023[i_d_BCT][14]
                 rez[9] = self.T26_ISO492_2023[i_d_BCT][15]
         return rez
@@ -2489,6 +2369,7 @@ class Window(QMainWindow):
         self.c.status = "*"
         self.updateWindowTitle()
         self.ui.stiffnessLineEdit.setText("")
+        self.ui.fsLineEdit.setText("")
         self.resetOutput()
 
     def resetClicked(self):
@@ -2524,6 +2405,7 @@ class Window(QMainWindow):
         # input tab
         self.ui.partNoTextEdit.setText("")
         self.ui.stiffnessLineEdit.setText("")
+        self.ui.fsLineEdit.setText("")
         self.ui.boreDiameterLineEdit.setText("")
         self.ui.outerDiameterLineEdit.setText("")
         self.ui.orFlangeDiameterLineEdit.setText("")

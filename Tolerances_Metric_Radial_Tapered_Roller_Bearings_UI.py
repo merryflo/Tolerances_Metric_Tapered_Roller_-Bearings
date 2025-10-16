@@ -242,9 +242,9 @@ class Ui_MainWindow(object):
         font.setFamily("MS Shell Dlg 2")
         font.setPointSize(11)
         self.stiffnessLabel.setFont(font)
-        self.stiffnessLabel.x = 560
-        self.stiffnessLabel.y = 290
-        self.stiffnessLabel.w = 81
+        self.stiffnessLabel.x = 550
+        self.stiffnessLabel.y = 310
+        self.stiffnessLabel.w = 61
         self.stiffnessLabel.h = 20
         self.stiffnessLabel.move(self.stiffnessLabel.x, self.stiffnessLabel.y)
         self.stiffnessLabel.setFixedSize(self.stiffnessLabel.w, self.stiffnessLabel.h)
@@ -258,14 +258,45 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(11)
         self.stiffnessLineEdit.setFont(font)
-        self.stiffnessLineEdit.x = 560
-        self.stiffnessLineEdit.y = 320
+        self.stiffnessLineEdit.x = 620
+        self.stiffnessLineEdit.y = 310
         self.stiffnessLineEdit.w = 81
         self.stiffnessLineEdit.h = 22
         self.stiffnessLineEdit.move(self.stiffnessLineEdit.x, self.stiffnessLineEdit.y)
         self.stiffnessLineEdit.setFixedSize(self.stiffnessLineEdit.w, self.stiffnessLineEdit.h)
         self.stiffnessLineEdit.setReadOnly(True)
         self.stiffnessLineEdit.setObjectName("stiffnessLineEdit")
+
+        # fs Label
+        self.fsLabel = QtWidgets.QLabel(self.inputTab)
+        font = QtGui.QFont()
+        font.setFamily("MS Shell Dlg 2")
+        font.setPointSize(11)
+        self.fsLabel.setFont(font)
+        self.fsLabel.x = 570
+        self.fsLabel.y = 350
+        self.fsLabel.w = 31
+        self.fsLabel.h = 20
+        self.fsLabel.move(self.fsLabel.x, self.fsLabel.y)
+        self.fsLabel.setFixedSize(self.fsLabel.w, self.fsLabel.h)
+        self.fsLabel.setAlignment(
+            QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter
+        )
+        self.fsLabel.setObjectName("fsLabel")
+
+        # fsLineEdit
+        self.fsLineEdit = QtWidgets.QLineEdit(self.inputTab)
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        self.fsLineEdit.setFont(font)
+        self.fsLineEdit.x = 620
+        self.fsLineEdit.y = 350
+        self.fsLineEdit.w = 81
+        self.fsLineEdit.h = 22
+        self.fsLineEdit.move(self.fsLineEdit.x, self.fsLineEdit.y)
+        self.fsLineEdit.setFixedSize(self.fsLineEdit.w, self.fsLineEdit.h)
+        self.fsLineEdit.setReadOnly(True)
+        self.fsLineEdit.setObjectName("fsLineEdit")
 
         # Bearing Type Label
         self.bearingTypeLabel = QtWidgets.QLabel(self.inputTab)
@@ -966,6 +997,8 @@ class Ui_MainWindow(object):
             _translate("MainWindow", "<html><head/><body><p>Outer ring</p></body></html>"))
         self.stiffnessLabel.setText(
             _translate("MainWindow", "<html><head/><body><p>Stiffness</p></body></html>"))
+        self.fsLabel.setText(
+            _translate("MainWindow", "<html><head/><body><p>f<sub>s</sub></p></body></html>"))
         self.bearingTypeLabel.setText(_translate("MainWindow", "<html><head/><body><p>Bearing type</p></body></html>"))
         self.outerDiameterLabel.setText(
             _translate("MainWindow", "<html><head/><body><p>Outer diameter D, mm</p></body></html>"))
@@ -1139,6 +1172,8 @@ class Ui_MainWindow(object):
         self.set_fixed_size(self.outerRingSymmetryListWidget, scale_factor)
         self.set_fixed_size(self.stiffnessLabel, scale_factor)
         self.set_fixed_size(self.stiffnessLineEdit, scale_factor)
+        self.set_fixed_size(self.fsLabel, scale_factor)
+        self.set_fixed_size(self.fsLineEdit, scale_factor)
         self.set_fixed_size(self.bearingTypeLabel, scale_factor)
         self.set_fixed_size(self.bearingTypeListWidget, scale_factor)
         self.set_fixed_size(self.flangePresenceListWidget, scale_factor)
@@ -1215,6 +1250,14 @@ class Ui_MainWindow(object):
         self.stiffnessLineEdit.move(
             int(self.stiffnessLineEdit.x * scale_factor),
             int(self.stiffnessLineEdit.y * scale_factor)
+        )
+        self.fsLabel.move(
+            int(self.fsLabel.x * scale_factor),
+            int(self.fsLabel.y * scale_factor)
+        )
+        self.fsLineEdit.move(
+            int(self.fsLineEdit.x * scale_factor),
+            int(self.fsLineEdit.y * scale_factor)
         )
         self.bearingTypeLabel.move(int(self.bearingTypeLabel.x * scale_factor),
                                    int(self.bearingTypeLabel.y * scale_factor))
